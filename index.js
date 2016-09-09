@@ -1,4 +1,5 @@
-const { app, Menu, Tray } = require('electron')
+const { app, Menu, Tray, globalShortcut } = require('electron')
+const { updateWP, openCurWP } = require('./controllers/wallpaper')
 
 let tray = null
 
@@ -8,18 +9,28 @@ function createTrap () {
     {
       label: 'Change current wallpaper',
       accelerator: 'Control+Shift+X',
-      click () {
-        console.log('item 1 clicked')
-      }
+      click: updateWP
     },
     {
       label: 'Save current wallpaper',
-      click () {
-        console.log('item 2 clicked')
-      }
+      click: openCurWP
     },
     {
       type: 'separator'
+    },
+    {
+      label: 'Wallpaper quality',
+      submenu: [
+        {
+          label: 'Excellent',
+          type: 'radio'
+        },
+        {
+          label: 'Regular',
+          type: 'radio',
+          checked: true
+        }
+      ]
     },
     {
       label: 'Update interval',
@@ -50,10 +61,19 @@ function createTrap () {
   tray.setContextMenu(contextMenu)
 }
 
+function registShortCut () {
+  if (!globalShortcut.isRegistered('Control+Shift+X')) {
+    globalShortcut.register('Control+Shift+X', updateWP)
+  }
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createTrap)
+app.on('ready', () => {
+  createTrap()
+  registShortCut()
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -62,12 +82,15 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
+
+  // Unregister all shortcuts.
+  globalShortcut.unregisterAll()
 })
 
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (tray === null) {
-    createWindow()
+    createTrap()
   }
 })
