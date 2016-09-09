@@ -3,6 +3,7 @@ const request = require('request')
 const fs = require('fs')
 const path = require('path')
 const wpUtil = require('wallpaper')
+const { shell } = require('electron')
 
 class unsplash {
   constructor (APPID) {
@@ -11,8 +12,8 @@ class unsplash {
     this.photo = {}
   }
 
-  _resolveUrl (url) {
-    return `${this.BASEURL}${url}?client_id=${this.APPID}`
+  setWallpaper () {
+    wpUtil.set(this.photo.path)
   }
 
   random () {
@@ -35,24 +36,29 @@ class unsplash {
         this.photo.urls = res.urls
         this.path = null
 
-        return this._downloadPhoto(this.photo.id, this.photo.urls.regular)
+        return this._downloadPhoto(this.photo.id, this.photo.urls.full)
       })
       .catch(err => {
         console.log(err)
       })
   }
 
+  openPhoto () {
+    shell.openItem(this.photo.path)
+  }
+
   _downloadPhoto (id, url) {
-    const regx = /&fm=(.*?)&/g
-    let fm = regx.exec(url)
+    // const regx = /&fm=(.*?)&/g
+    // let fm = regx.exec(url)
+    let fm = 'jpg'
     if (fm) {
-      fm = fm[1]
       this.photo.path = path.join(__dirname, '..', 'resources', 'wallpapers', `${id}.${fm}`)
 
       return new Promise((resolve, reject) => {
         try {
           request(url).pipe(fs.createWriteStream(this.photo.path))
             .on('finish', () => {
+              console.log(this.photo.path)
               this.setWallpaper()
             })
 
@@ -66,8 +72,8 @@ class unsplash {
     }
   }
 
-  setWallpaper () {
-    wpUtil.set(this.photo.path)
+  _resolveUrl (url) {
+    return `${this.BASEURL}${url}?client_id=${this.APPID}`
   }
 }
 
