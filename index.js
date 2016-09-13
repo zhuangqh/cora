@@ -1,5 +1,5 @@
 const { app, Menu, Tray, globalShortcut } = require('electron')
-const { updateWP, openCurWP } = require('./controllers/wallpaper')
+const { updateWP, openCurWP, loadPrev, setQuality } = require('./controllers/wallpaper')
 
 let tray = null
 
@@ -10,6 +10,11 @@ function createTrap () {
       label: 'Change current wallpaper',
       accelerator: 'Control+Shift+X',
       click: updateWP
+    },
+    {
+      label: 'Load previous wallpaper',
+      accelerator: 'Control+Shift+Z',
+      click: loadPrev
     },
     {
       label: 'Save current wallpaper',
@@ -23,12 +28,18 @@ function createTrap () {
       submenu: [
         {
           label: 'Excellent',
-          type: 'radio'
+          type: 'radio',
+          click () {
+            setQuality('full')
+          }
         },
         {
           label: 'Regular',
           type: 'radio',
-          checked: true
+          checked: true,
+          click () {
+            setQuality('regular')
+          }
         }
       ]
     },

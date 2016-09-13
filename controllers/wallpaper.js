@@ -8,5 +8,11 @@ module.exports = {
   },
   openCurWP () {
     unsplash.openPhoto()
+  },
+  loadPrev () {
+    unsplash.prevOne()
+  },
+  setQuality (quality) {
+    unsplash.setQuality(quality)
   }
 }

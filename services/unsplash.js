@@ -10,6 +10,8 @@ class unsplash {
     this.APPID = APPID
     this.BASEURL = 'https://api.unsplash.com'
     this.photo = {}
+    this.prevPhoto = null
+    this.quality = 'regular'
   }
 
   setWallpaper () {
@@ -23,9 +25,15 @@ class unsplash {
       json: true
     }
 
+    this.prev = this.photo.id
+
     rp(options)
       .then(res => {
         this.photo.id = res.id
+
+        if (!this.prev) {
+          this.prev = this.photo.id
+        }
 
         this.photo.info = {
           created_at: res.created_at,
@@ -36,7 +44,7 @@ class unsplash {
         this.photo.urls = res.urls
         this.path = null
 
-        return this._downloadPhoto(this.photo.id, this.photo.urls.full)
+        return this._downloadPhoto(this.photo.id, this.photo.urls[this.quality])
       })
       .catch(err => {
         console.log(err)
@@ -47,29 +55,30 @@ class unsplash {
     shell.openItem(this.photo.path)
   }
 
-  _downloadPhoto (id, url) {
-    // const regx = /&fm=(.*?)&/g
-    // let fm = regx.exec(url)
-    let fm = 'jpg'
-    if (fm) {
-      this.photo.path = path.join(__dirname, '..', 'resources', 'wallpapers', `${id}.${fm}`)
+  prevOne () {
+    // this._getPhotoById(this.prev)
+  }
 
-      return new Promise((resolve, reject) => {
-        try {
-          request(url).pipe(fs.createWriteStream(this.photo.path))
-            .on('finish', () => {
-              console.log(this.photo.path)
-              this.setWallpaper()
-            })
-
-          resolve()
-        } catch (e) {
-          reject(e)
-        }
-      })
-    } else {
-      return Promise.reject('format error')
+  setQuality (quality) {
+    if (quality === 'regular' || quality === 'full') {
+      this.quality = quality
     }
+  }
+
+  _downloadPhoto (id, url) {
+    this.photo.path = path.join(__dirname, '..', 'resources', 'wallpapers', `${id}.jpg`)
+
+    return new Promise((resolve, reject) => {
+      request(url).pipe(fs.createWriteStream(this.photo.path))
+        .on('finish', () => {
+          console.log(this.photo.path)
+          resolve()
+          this.setWallpaper()
+        })
+        .on('error', () => {
+          reject()
+        })
+    })
   }
 
   _resolveUrl (url) {
