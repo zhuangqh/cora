@@ -1,72 +1,11 @@
 const { app, Menu, Tray, globalShortcut } = require('electron')
-const { updateWP, openCurWP, loadPrev, setQuality } = require('./controllers/wallpaper')
+const { getTemplate, updateWP } = require('./controllers/wallpaper')
 
 let tray = null
 
 function createTrap () {
   tray = new Tray('./resources/icon/icon.png')
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'Change current wallpaper',
-      accelerator: 'Ctrl+Shift+X',
-      click: updateWP
-    },
-    {
-      label: 'Load previous wallpaper',
-      click: loadPrev
-    },
-    {
-      label: 'Save current wallpaper',
-      click: openCurWP
-    },
-    {
-      type: 'separator'
-    },
-    {
-      label: 'Wallpaper quality',
-      submenu: [
-        {
-          label: 'Excellent',
-          type: 'radio',
-          click () {
-            setQuality('full')
-          }
-        },
-        {
-          label: 'Regular',
-          type: 'radio',
-          checked: true,
-          click () {
-            setQuality('regular')
-          }
-        }
-      ]
-    },
-    {
-      label: 'Update interval',
-      submenu: [
-        {
-          label: 'Every hour',
-          type: 'radio'
-        },
-        {
-          label: 'Every 3 hours',
-          type: 'radio',
-          checked: true
-        }
-      ]
-    },
-    {
-      type: 'separator'
-    },
-    {
-      label: 'Quit',
-      accelerator: 'CmdOrCtrl+Q',
-      click () {
-        app.quit()
-      }
-    }
-  ])
+  const contextMenu = Menu.buildFromTemplate(getTemplate(tray))
   tray.setToolTip('cora')
   tray.setContextMenu(contextMenu)
 }

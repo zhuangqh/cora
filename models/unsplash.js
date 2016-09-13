@@ -14,6 +14,10 @@ class unsplash {
     this.quality = 'regular'
   }
 
+  getStat () {
+    return this.photo.info
+  }
+
   random () {
     const options = {
       method: 'GET',
@@ -23,7 +27,7 @@ class unsplash {
 
     this.prev = this.photo.id
 
-    this._getAndSetPhoto(options)
+    return this._getAndSetPhoto(options)
   }
 
   openPhoto () {
@@ -50,7 +54,8 @@ class unsplash {
       request(url).pipe(fs.createWriteStream(this.photo.path))
         .on('finish', () => {
           console.log(this.photo.path)
-          return wpUtil.set(this.photo.path)
+          wpUtil.set(this.photo.path)
+          resolve()
         })
         .on('error', () => {
           reject()
@@ -59,11 +64,12 @@ class unsplash {
   }
 
   _getAndSetPhoto (options) {
-    rp(options)
+    return rp(options)
       .then(res => {
+        console.log(res)
         this.photo.id = res.id
 
-        this.photo.res = {
+        this.photo.info = {
           created_at: res.created_at,
           downloads: res.downloads,
           likes: res.likes
@@ -73,9 +79,6 @@ class unsplash {
         this.path = null
 
         return this._downloadPhoto(this.photo.id, this.photo.urls[this.quality])
-      })
-      .catch(err => {
-        console.log(err)
       })
   }
 
