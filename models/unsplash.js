@@ -66,13 +66,14 @@ class unsplash {
   _getAndSetPhoto (options) {
     return rp(options)
       .then(res => {
-        console.log(res)
         this.photo.id = res.id
 
         this.photo.info = {
           created_at: res.created_at,
           downloads: res.downloads,
-          likes: res.likes
+          likes: res.likes,
+          author: res.user.name,
+          homeLink: res.user.links.html
         }
 
         this.photo.urls = res.urls

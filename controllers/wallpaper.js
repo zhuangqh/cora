@@ -1,5 +1,5 @@
 const Unsplash = require('../models/unsplash')
-const { app, Menu } = require('electron')
+const { app, Menu, shell } = require('electron')
 
 const unsplash = new Unsplash('2fc59277f98c09117bb7d3a2d1b718bb45bedd18477de21716cdfdc6323cae29')
 
@@ -87,16 +87,24 @@ const getTemplate = (tray) => {
 
     if (info) {
       template[0].enabled = true
-      template[0].submenu = [{
-        label: 'created at: ' + info.created_at.slice(0, 10),
-        enabled: false
-      }, {
-        label: `downloads: ${info.downloads}`,
-        enabled: false
-      }, {
-        label: `likes: ${info.likes}`,
-        enabled: false
-      }]
+      template[0].submenu = [
+        {
+          label: `Photographer: ${info.author}`,
+          click () {
+            shell.openExternal(info.homeLink)
+          }
+        },
+        {
+          label: 'created at: ' + info.created_at.slice(0, 10),
+          enabled: false
+        }, {
+          label: `downloads: ${info.downloads}`,
+          enabled: false
+        }, {
+          label: `likes: ${info.likes}`,
+          enabled: false
+        }
+      ]
 
       const menu = Menu.buildFromTemplate(template)
       tray.setContextMenu(menu)
