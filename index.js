@@ -8,12 +8,11 @@ function createTrap () {
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Change current wallpaper',
-      accelerator: 'Control+Shift+X',
+      accelerator: 'Ctrl+Shift+X',
       click: updateWP
     },
     {
       label: 'Load previous wallpaper',
-      accelerator: 'Control+Shift+Z',
       click: loadPrev
     },
     {
