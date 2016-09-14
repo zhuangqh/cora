@@ -1,10 +1,11 @@
 const { app, Menu, Tray, globalShortcut } = require('electron')
+const path = require('path')
 const { getTemplate, updateWP } = require('./controllers/wallpaper')
 
 let tray = null
 
 function createTrap () {
-  tray = new Tray('./resources/icon/icon.png')
+  tray = new Tray(path.join(__dirname, 'resources', 'icon', 'icon.png'))
   const contextMenu = Menu.buildFromTemplate(getTemplate(tray))
   tray.setToolTip('cora')
   tray.setContextMenu(contextMenu)
