@@ -5,7 +5,7 @@ const path = require('path')
 const wpUtil = require('wallpaper')
 const { shell } = require('electron')
 
-class unsplash {
+class Unsplash {
   constructor (APPID) {
     this.APPID = APPID
     this.BASEURL = 'https://api.unsplash.com'
@@ -98,4 +98,4 @@ class unsplash {
   }
 }
 
-module.exports = unsplash
+module.exports = Unsplash

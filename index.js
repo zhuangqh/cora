@@ -1,19 +1,22 @@
 const { app, Menu, Tray, globalShortcut } = require('electron')
 const path = require('path')
-const { getTemplate, updateWP } = require('./controllers/wallpaper')
+const UIController = require('./controllers')
 
 let tray = null
+let controller = null
 
 function createTrap () {
   tray = new Tray(path.join(__dirname, 'resources', 'icon', 'icon.png'))
-  const contextMenu = Menu.buildFromTemplate(getTemplate(tray))
+  controller = new UIController(tray)
+
+  const contextMenu = Menu.buildFromTemplate(controller.getTemplate())
   tray.setToolTip('cora')
   tray.setContextMenu(contextMenu)
 }
 
 function registShortCut () {
   if (!globalShortcut.isRegistered('Control+Shift+X')) {
-    globalShortcut.register('Control+Shift+X', updateWP)
+    globalShortcut.register('Control+Shift+X', controller.getUpdator())
   }
 }
 
