@@ -72,6 +72,22 @@ class UIController {
             click: () => {
               this.scheduler.setInterval(3)
             }
+          },
+          {
+            label: 'Every 12 hours',
+            type: 'radio',
+            checked: true,
+            click: () => {
+              this.scheduler.setInterval(12)
+            }
+          },
+          {
+            label: 'Every day',
+            type: 'radio',
+            checked: true,
+            click: () => {
+              this.scheduler.setInterval(24)
+            }
           }
         ]
       },
