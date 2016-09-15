@@ -7,6 +7,7 @@ class UIController {
   constructor (tray, loadingView) {
     this.tray = tray
     this.loadingView = loadingView
+    this.showLoadingView = true
     // put the loading view under the tray icon
     const bound = this.tray.getBounds()
     this.loadingView.setPosition(bound.x - (this.loadingView.getBounds().width - bound.width) / 2, bound.y)
@@ -96,6 +97,12 @@ class UIController {
         ]
       },
       {
+        label: 'Toggle update notification',
+        click: () => {
+          this.showLoadingView = !this.showLoadingView
+        }
+      },
+      {
         type: 'separator'
       },
       {
@@ -149,10 +156,10 @@ class UIController {
     }
 
     this.updateWP = () => {
-      console.log('update...')
-
-      this.loadingView.show()
-      this.loadingView.focus()
+      if (this.showLoadingView) {
+        this.loadingView.show()
+        this.loadingView.focus()
+      }
 
       this.unsplash.random().then(() => {
         updatePhotoStat()
