@@ -82,7 +82,6 @@ class UIController {
           {
             label: 'Every 12 hours',
             type: 'radio',
-            checked: true,
             click: () => {
               this.scheduler.setInterval(12)
             }
@@ -90,7 +89,6 @@ class UIController {
           {
             label: 'Every day',
             type: 'radio',
-            checked: true,
             click: () => {
               this.scheduler.setInterval(24)
             }
