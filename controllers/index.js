@@ -127,9 +127,15 @@ class UIController {
       width: 300,
       height: 400,
       title: 'About',
-      resizable: true
+      resizable: true,
+      show: false
     })
     aboutView.loadURL(`file://${__dirname}/../views/about.html`)
+
+    aboutView.once('ready-to-show', () => {
+      aboutView.show()
+    })
+
     aboutView.on('close', (e) => {
       aboutView = null
     })
