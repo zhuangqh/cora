@@ -1,10 +1,10 @@
-const { app, Menu, shell } = require('electron')
+const { app, Menu, shell, BrowserWindow } = require('electron')
 
 const Unsplash = require('../models/unsplash')
 const Scheduler = require('../models/scheduler')
 
 class UIController {
-  constructor (tray, loadingView) {
+  constructor (tray, loadingView, aboutView) {
     this.tray = tray
     this.loadingView = loadingView
     this.showLoadingView = true
@@ -106,6 +106,10 @@ class UIController {
         type: 'separator'
       },
       {
+        label: 'About',
+        click: this.createAboutView
+      },
+      {
         label: 'Quit',
         accelerator: 'CmdOrCtrl+Q',
         click () {
@@ -115,6 +119,20 @@ class UIController {
     ]
     this.scheduler = new Scheduler(this.updateWP)
     this.scheduler.run()
+  }
+
+  createAboutView () {
+    // about this application
+    let aboutView = new BrowserWindow({
+      width: 300,
+      height: 400,
+      title: 'About',
+      resizable: true
+    })
+    aboutView.loadURL(`file://${__dirname}/../views/about.html`)
+    aboutView.on('close', (e) => {
+      aboutView = null
+    })
   }
 
   getTemplate () {

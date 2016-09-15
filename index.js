@@ -5,28 +5,31 @@ const UIController = require('./controllers')
 let tray = null
 let controller = null
 let loadingView = null
-const LOADINGWIDTH = 140
-const LOADINGHEIGHT = 60
+let aboutView = null
+
+const LOADING_WIDTH = 140
+const LOADING_HEIGHT = 60
+
 
 function createTrap () {
   tray = new Tray(path.join(__dirname, 'resources', 'icon', 'icon.png'))
+
+  // show the loading animation while updating wallpaper
   loadingView = new BrowserWindow({
-    width: LOADINGWIDTH,
-    height: LOADINGHEIGHT,
+    width: LOADING_WIDTH,
+    height: LOADING_HEIGHT,
     title: 'Loading',
     resizable: false,
     transparent: true,
     frame: false,
     show: false
   })
-
   loadingView.loadURL(`file://${__dirname}/views/loading.html`)
-
   loadingView.on('close', () => {
     loadingView = null
   })
 
-  controller = new UIController(tray, loadingView)
+  controller = new UIController(tray, loadingView, aboutView)
 
   const contextMenu = Menu.buildFromTemplate(controller.getTemplate())
   tray.setToolTip('cora')

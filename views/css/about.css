@@ -1,0 +1,28 @@
+html, body {
+  margin: 0;
+}
+
+#main {
+  width: 200px;
+  text-align: center;
+  margin: auto;
+  padding-top: 50px;
+}
+
+#protrait {
+  width: 100px;
+  height: 100px;
+}
+
+.impt {
+  font-weight: bold;
+}
+
+#github-logo {
+  width: 16px;
+  height: 16px;
+}
+
+#version {
+  margin-top: 50px;
+}
