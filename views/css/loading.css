@@ -1,0 +1,29 @@
+body {
+  margin: 0;
+  /*background: black;*/
+}
+
+#arrow {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent white transparent;
+  margin: auto;
+}
+
+#main {
+  background-color: white;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+#main > p {
+  display: inline-block;
+  margin: 0;
+}
+
+#main > img {
+  height: 16px;
+  width: 32px;
+}

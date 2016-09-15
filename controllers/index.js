@@ -1,10 +1,16 @@
-const Unsplash = require('../models/unsplash')
-const Scheduler = require('../models/scheduler')
 const { app, Menu, shell } = require('electron')
 
+const Unsplash = require('../models/unsplash')
+const Scheduler = require('../models/scheduler')
+
 class UIController {
-  constructor (tray) {
+  constructor (tray, loadingView) {
     this.tray = tray
+    this.loadingView = loadingView
+    // put the loading view under the tray icon
+    const bound = this.tray.getBounds()
+    this.loadingView.setPosition(bound.x - (this.loadingView.getBounds().width - bound.width) / 2, bound.y)
+
     this.unsplash = new Unsplash('2fc59277f98c09117bb7d3a2d1b718bb45bedd18477de21716cdfdc6323cae29')
     this._generateUpdator()
     this.template = [
@@ -146,8 +152,13 @@ class UIController {
 
     this.updateWP = () => {
       console.log('update...')
+
+      this.loadingView.show()
+      this.loadingView.focus()
+
       this.unsplash.random().then(() => {
         updatePhotoStat()
+        this.loadingView.hide()
       })
     }
   }
