@@ -5,10 +5,11 @@ class Scheduler {
     this.job = null // cron job
     this.action = action
     this.nextTick = new Date()
-    this.interval = 3 // minute
+    this.interval = 3 // hours
   }
 
   setInterval (interval) {
+    console.log('set interval')
     if (typeof interval === 'number') {
       this.interval = interval
     }
@@ -17,6 +18,7 @@ class Scheduler {
   run () {
     const generateSchedule = () => {
       this.nextTick.setHours(this.nextTick.getHours() + this.interval)
+      this.action()
       this.job = schedule.scheduleJob(this.nextTick, generateSchedule)
     }
 

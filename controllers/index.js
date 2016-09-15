@@ -1,4 +1,5 @@
 const Unsplash = require('../models/unsplash')
+const Scheduler = require('../models/scheduler')
 const { app, Menu, shell } = require('electron')
 
 class UIController {
@@ -21,13 +22,13 @@ class UIController {
       },
       {
         label: 'Load previous wallpaper',
-        click () {
+        click: () => {
           this.unsplash.prevOne()
         }
       },
       {
         label: 'Save current wallpaper',
-        click () {
+        click: () => {
           this.unsplash.openPhoto()
         }
       },
@@ -40,7 +41,7 @@ class UIController {
           {
             label: 'Excellent',
             type: 'radio',
-            click () {
+            click: () => {
               this.unsplash.setQuality('full')
             }
           },
@@ -48,7 +49,7 @@ class UIController {
             label: 'Regular',
             type: 'radio',
             checked: true,
-            click () {
+            click: () => {
               this.unsplash.setQuality('regular')
             }
           }
@@ -59,12 +60,18 @@ class UIController {
         submenu: [
           {
             label: 'Every hour',
-            type: 'radio'
+            type: 'radio',
+            click: () => {
+              this.scheduler.setInterval(1)
+            }
           },
           {
             label: 'Every 3 hours',
             type: 'radio',
-            checked: true
+            checked: true,
+            click: () => {
+              this.scheduler.setInterval(3)
+            }
           }
         ]
       },
@@ -79,6 +86,8 @@ class UIController {
         }
       }
     ]
+    this.scheduler = new Scheduler(this.updateWP)
+    this.scheduler.run()
   }
 
   getTemplate () {
@@ -120,6 +129,7 @@ class UIController {
     }
 
     this.updateWP = () => {
+      console.log('update...')
       this.unsplash.random().then(() => {
         updatePhotoStat()
       })
