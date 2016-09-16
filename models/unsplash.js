@@ -2,6 +2,7 @@ const rp = require('request-promise')
 const request = require('request')
 const fs = require('fs')
 const path = require('path')
+const os = require('os')
 const wpUtil = require('wallpaper')
 const { shell } = require('electron')
 
@@ -12,6 +13,7 @@ class Unsplash {
     this.photo = {}
     this.prevPhoto = null
     this.quality = 'regular'
+    this.basePath = path.join(os.homedir(), 'Documents', 'cora')
   }
 
   getStat () {
@@ -48,7 +50,7 @@ class Unsplash {
   }
 
   _downloadPhoto (id, url) {
-    this.photo.path = path.join(__dirname, '..', 'resources', 'wallpapers', `${id}.jpg`)
+    this.photo.path = path.join(this.basePath, `${id}.jpg`)
 
     return new Promise((resolve, reject) => {
       request(url).pipe(fs.createWriteStream(this.photo.path))
