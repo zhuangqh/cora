@@ -2,6 +2,17 @@
   <head>
     <title>About</title>
     <link href="./css/about.css" rel="stylesheet" />
+    <script>
+      window.onload = function () {
+        const shell = require('electron').shell
+
+        const exLinksBtn = document.getElementById('cora-link')
+
+        exLinksBtn.addEventListener('click', function (event) {
+          shell.openExternal('https://github.com/zhuangqh/cora')
+        })
+      }
+    </script>
   </head>
   <body>
     <div id="main">
@@ -9,7 +20,7 @@
       <p>Author: <span class="impt">zhuangqh</span></p>
       <div>
         Contact me:
-        <a href="https://github.com/zhuangqh/cora">
+        <a id="cora-link" href="#">
           <img id="github-logo" src="./img/GitHub-logo.png"/>
         </a>
       </div>
